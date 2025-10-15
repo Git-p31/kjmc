@@ -1,4 +1,3 @@
-//supabase_service.dart
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -27,6 +26,31 @@ class SupabaseService {
           email: email,
           password: password,
         );
+      } else {
+        throw Exception(e.message);
+      }
+    } catch (e) {
+      throw Exception('Unexpected error: $e');
+    }
+  }
+
+  /// Только регистрация — не пытается входить
+  static Future<void> signUpOnly(String email, String password) async {
+    try {
+      final res = await supabase.auth.signUp(
+        email: email,
+        password: password,
+      );
+
+      // ✅ В новой версии Supabase, если регистрация успешна, `res.user` != null
+      // ✅ Ошибки бросаются как исключения, а не в `res.error`
+      if (res.user == null) {
+        throw Exception('Неизвестная ошибка при регистрации: пользователь не создан.');
+      }
+    } on AuthException catch (e) {
+      // ✅ Если ошибка "User already registered" — пробрасываем дальше
+      if (e.message.contains('User already registered')) {
+        rethrow; // Пробрасываем ошибку дальше
       } else {
         throw Exception(e.message);
       }

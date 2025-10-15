@@ -1,6 +1,7 @@
 // lib/screens/auth/auth_screen.dart
 import 'package:flutter/material.dart';
 import 'package:kjmc/supabase_service.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../dashboard/dashboard_screen.dart';
 import 'login_screen.dart';
 
@@ -57,12 +58,23 @@ class _AuthScreenState extends State<AuthScreen> {
     }
     setState(() => _isLoading = true);
     try {
-      await SupabaseService.signUpOrSignIn(
+      // ✅ Используем новый метод, который только регистрирует
+      await SupabaseService.signUpOnly(
           emailController.text, passwordController.text);
+
+      // Если регистрация успешна
       if (!mounted) return;
       _clearStepFields(2);
       setState(() => _step = 2);
+    } on AuthException catch (e) {
+      // ✅ Обрабатываем ошибки аутентификации
+      if (e.message.contains('User already registered')) {
+        _showMessage('Ошибка: Пользователь с таким email уже существует.', success: false);
+      } else {
+        _showMessage('Ошибка: ${e.message}');
+      }
     } catch (e) {
+      // ✅ Обрабатываем все остальные ошибки
       _showMessage('Ошибка: ${e.toString()}');
     } finally {
       if (mounted) setState(() => _isLoading = false);

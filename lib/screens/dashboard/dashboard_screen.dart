@@ -4,6 +4,7 @@ import 'profile_screen.dart';
 import 'crm_screen.dart';
 import 'events_screen.dart';
 import 'groups_screen.dart';
+import 'workshops_screen.dart'; // ✅ Добавляем импорт
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -20,6 +21,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     CrmScreen(),
     EventsScreen(),
     GroupsScreen(),
+    WorkshopsScreen(), // ✅ Добавляем в список экранов
   ];
 
   final List<String> _titles = const [
@@ -27,6 +29,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     'CRM',
     'События',
     'Группы',
+    'Воркшопы', // ✅ Добавляем заголовок
   ];
 
   @override
@@ -84,12 +87,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Navigator.pop(context);
                 },
               ),
+              ListTile( // ✅ Новый пункт меню для Воркшопов
+                leading: const Icon(Icons.workspaces, color: Colors.white),
+                title: const Text('Воркшопы', style: TextStyle(color: Colors.white)),
+                onTap: () {
+                  setState(() => _currentIndex = 4); // ✅ Индекс 4
+                  Navigator.pop(context);
+                },
+              ),
             ],
           ),
         ),
       ),
-      body: _screens[_currentIndex],
+      body: _screens[_currentIndex], // ✅ Теперь отображает 5 экранов
     );
   }
 }
-

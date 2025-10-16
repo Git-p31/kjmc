@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'profile_screen.dart';
 import 'crm_screen.dart';
 import 'events_screen.dart';
-import 'groups_screen.dart';
-import 'workshops_screen.dart'; // ✅ Добавляем импорт
+import 'ministries_screen.dart'; // ✅ Используем MinistriesScreen вместо GroupsScreen
+import 'workshops_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -20,16 +20,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ProfileScreen(),
     CrmScreen(),
     EventsScreen(),
-    GroupsScreen(),
-    WorkshopsScreen(), // ✅ Добавляем в список экранов
+    MinistriesScreen(), // ✅ Заменено с GroupsScreen на MinistriesScreen
+    WorkshopsScreen(),
   ];
 
   final List<String> _titles = const [
     'Профиль',
     'CRM',
     'События',
-    'Группы',
-    'Воркшопы', // ✅ Добавляем заголовок
+    'Служения', // ✅ Остаётся "Служения" — это корректное название
+    'Воркшопы',
   ];
 
   @override
@@ -81,17 +81,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               ListTile(
                 leading: const Icon(Icons.layers, color: Colors.white),
-                title: const Text('Группы', style: TextStyle(color: Colors.white)),
+                title: const Text('Служения', style: TextStyle(color: Colors.white)),
                 onTap: () {
                   setState(() => _currentIndex = 3);
                   Navigator.pop(context);
                 },
               ),
-              ListTile( // ✅ Новый пункт меню для Воркшопов
+              ListTile(
                 leading: const Icon(Icons.workspaces, color: Colors.white),
                 title: const Text('Воркшопы', style: TextStyle(color: Colors.white)),
                 onTap: () {
-                  setState(() => _currentIndex = 4); // ✅ Индекс 4
+                  setState(() => _currentIndex = 4);
                   Navigator.pop(context);
                 },
               ),
@@ -99,7 +99,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
       ),
-      body: _screens[_currentIndex], // ✅ Теперь отображает 5 экранов
+      body: _screens[_currentIndex],
     );
   }
 }
